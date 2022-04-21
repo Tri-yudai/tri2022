@@ -1,174 +1,57 @@
 # 新卒技術研修(Git,Webアプリ研修)
 
 ## この研修の目標
-・Gitについて理解し、基礎的なGitコマンドが打てるようになる。<br>
 ・PHP,Apache,MySQLでWebアプリケーションを構築し、データベースを操作する機能を実装する。<br>
 ・(時間に余裕があったら)CSSで画面表示の体裁を整える。
 
 ## 準備
-### GitHubアカウントの作成
-こちらの記事を参考にgithubアカウントを作成してください。<br>
-ユーザ名は「triple-苗字」でお願いします。<br>
-https://tonari-it.com/github-signup/<br>
-<br>
-
-### VsCode, Git, XAMPPのインストール
-以下の記事を参考にインストールを行ってください。<br><br>
-VsCode<br>
-https://qiita.com/Shi-nakaya/items/c43fb6c1e638d51bf1c8<br>
-<br>
-Git<br>
-https://prog-8.com/docs/git-env-win<br>
-<br>
+### XAMPPのインストール
 XAMPP<br>
 https://www.webdesignleaves.com/pr/plugins/xampp_01.html<br>
 <br>
 
 ### リモートリポジトリのクローン
-```
-# PowerShellを開いて
-# 現在のディレクトリを確認
-pwd
-
-# こんな感じで表示されていたらOK
-# path
-# ----
-# C:￥\Users￥名前
-
-# もし違ったら
-cd ~
-
-# と打ってから
-pwd
-
-# とすればOK
-# ※cd ~ の「~」は、ホームディレクトリ(Windowsでは"C:￥Users￥名前)を示します
-
-# このディレクトリ下にprojectsディレクトリを作成
-mkdir projects
-
-# projectsディレクトリに移動
-cd projects
-
-# 研修用のリモートリポジトリをクローン
-git clone https://github.com/triple-hirano/training_2021
-
-# projectsディレクトリの下に「training_2021」ディレクトリが作成されていればクローン成功！
-
-# ユーザ名とメールアドレスを登録する
-
-# training_2021ディレクトリに移動
-cd training_2021
-
-# ユーザ名の登録
-git config --local user.name "githubのユーザ名"
-
-# メールアドレスの登録
-git config --local user.email githubに登録したメールアドレス(「"」はつけない)
-```
+1. https://github.com/tri-tarasawa/tri2022 の「Fork」ボタンを押下<br>
+　⇒自分のアカウントに 自分の名前/tri2022　という名前のリポジトリができていることを確認する<br>
+2. VSCodeの「Gitリポジトリのクローン」を選択し、ForkしたリポジトリのURLを入力<br>
+　⇒リポジトリのURL：https://github.com/自分の名前/tri2022<br>
+3. プロジェクトのフォルダを選択<br>
+　⇒好きな場所に好きな名前のフォルダを作成して、そのフォルダを選択してください<br>
+　　例）C:/Users/tarasawa_chisato/Documents/tri2022<br>
 
 ### ApacheのDocumentRootを変更する
 XAMPPのコントロールパネルを開き、Apache行のConfigボタン→Apache(httpd.conf)をクリック<br>
 httpd.confが開くので、以下のように修正
 ```
-DocumentRoot "C:/Users/名前/projects/training_2021"
-<Directory "C:/Users/名前/projects/training_2021">
+DocumentRoot "C:/Users/tarasawa_chisato/Documents/tri2022"
+<Directory "C:/Users/tarasawa_chisato/Documents/tri2022">
 ```
 Apacheを再起動(Stopボタンを押して再度Start)し、<br>
 Chromeで"localhost/hello.html"にアクセス<br>
-「2021年新卒技術研修」と表示されていたらOK！<br>
+「2022年新卒技術研修」と表示されていたらOK！<br>
 <br>
 以上で準備完了！<br>
 
-# Gitについて
-まずは、こちらのサイトのGitの基本「Gitを使ったバージョン管理」から「ワークツリーとインデックス」まで読んでみてください。(15分想定)<br>
-https://backlog.com/ja/git-tutorial/intro/01/<br>
-```
-キーワード
-・リモートリポジトリ
-・ローカルリポジトリ
-・ワークツリー
-・インデックス
-```
-<br>
-入門の動画↓<br>
-https://youtu.be/i1L3A0SLDyg<br>
-<br>
-<img width="864" alt="git" src="https://user-images.githubusercontent.com/81727205/114349757-47b5bf80-9ba3-11eb-8c5e-bf8cabcd7a7f.PNG">
-
-## 実践
-```
-ここで使うgitコマンド
-・git branch
-・git checkout
-・git status
-・git add
-・git commit
-・git push
-・git pull
-```
-
 ### ブランチの作成
-```
-# PowerShellで~/projects/training_2021に移動し
-git branch
-
-# * master
-# と表示されていると思います
-
-# ブランチの作成(ブランチ名はbranch_苗字でお願いします)
-git checkout -b branch_苗字
-
-# 再度
-git branch
-
-# とすると、
-# * branch_苗字
-#   master
-# と表示されていると思います。
-# 「*」がついたブランチが現在作業しているブランチとなります。
-
-# ブランチの切り替え
-git checkout ブランチ名
-```
+1. 画面左下の master をクリックし、 Create new branch... をクリック<br>
+2. ブランチ名を入力<br>
+　⇒ブランチ名はbranch_苗字で<br>
 
 ### ファイルの編集
 ここからはそれぞれ作っていただいたブランチ上での作業になります。<br>
-git branch コマンドで正しいブランチにいるか確認してください。<br>
-1. VsCodeでtraining_2021フォルダを開く<br>
-2. self_introductionディレクトリのname.phpを同ディレクトリにコピーし、ファイル名を自分の苗字.phpに変更<br>
-3. 作成したファイルに自己紹介を入力<br>
-4. Chromeで"localhost/self_introduction/作ったファイル名"
-にアクセスした時、自己紹介が表示されるようにする。
+画面下部の青いバーの左側に自分が作成したブランチ名が表示されていることを確認してください。<br>
+例）branch_tarasawa
+1. self_introductionディレクトリのtemplate.phpを同ディレクトリにコピーし、ファイル名を自分の苗字.phpに変更<br>
+2. 作成したファイルに自己紹介を入力<br>
+3. Chromeで"localhost/self_introduction/作ったファイル名"<br>
+にアクセスした時、自己紹介が表示されるようにHTML内でPHPを書く。<br>
 
 ### Gitの操作
-```
-# PowerShellで~/projects/training_2021に移動し、
-git status
-
-# 編集したファイルをインデックスに追加
-git add ファイル名
-
-# インデックスに追加したファイルをコミット
-git commit -m 'コミットメッセージ'
-
-# リモートリポジトリにプッシュ
- git push --set-upstream origin 自分のブランチ名
-
-# 講師によるmasterブランチへのマージ作業が完了したら
-# masterブランチに移動して、リモートリポジトリの変更分をローカルに持ってくる
-git checkout master
-git pull
-
-# masterブランチの変更分を、自分のブランチに反映させる
-git checkout 自分のブランチ名
-git merge master
-
-# 他の人の自己紹介も見れるようになっていればOK！
-```
+"localhost/self/introduction/作ったファイル名"で自己紹介が表示されるようになったら、<br>
+そのファイルを自分のリポジトリにプッシュして、tri-tarasawa/tri2022 にプルリクエストを送ってください。<br>
 
 ## データベースの接続
-training_2021/select.phpをVSCodeで開いてみてください。<br>
+tri2022/select.phpをVSCodeで開いてみてください。<br>
 このファイルではデータベースに接続し、データを出力するという処理が書かれています。<br>
 しかし、この処理を呼び出すためにChromeで"localhost/select.php"にアクセスしても、<br>
 「データベースに接続できません」とメッセージが表示されるはずです。<br>
@@ -205,7 +88,14 @@ create database training;
 # trainingを選択
 use training;
 
-# usersテーブルを作成(以下のSQLを実行)
+# usersテーブルを作成
+# "id"テーブル: integer　・・・数値
+#　　　　　　　　AUTO_INCREMENT ・・・自動で連続した数字をつけていく
+# "name"カラム: varchar(255) ・・・255字の文字列
+# "year"カラム: integer ・・・数値
+# "color"カラム: varchar(255) ・・・255字の文字列
+# "created_at"カラム: datetime ・・・yyyy/mm/dd hh:mm:ssの時間（例：2022/04/21 19:40:00）
+# 最後のPRIMARY KEY(id)は、id カラムの値はほかのレコードとは被らないもの（要は主キー）
 create table users (
 id integer AUTO_INCREMENT,
 name varchar(255),
@@ -229,6 +119,9 @@ insert into users values(null, '佐藤', 59, '黄', '2021-04-20 12:00:00'),
 
 # select * from users; でデータが取得できればOK！
 ```
+ちなみに、テーブルを作成するCREATE文で使用した、integerとか、varchar(255)とかは、他にもかなりの数があり、それぞれ入れられるデータが異なります。<br>
+https://www.dbonline.jp/mysql/type/<br>
+<br>
 
 ### select.phpの編集
 ```
@@ -255,49 +148,21 @@ name      : 上限を255文字とした可変長文字
 favorite  : 上限を255文字とした可変長文字
 aspiration: 上限を255文字とした可変長文字
 
-※usersテーブル作成のSQLを参考にしてください。
-答え
-create table self_introductions (
-id integer AUTO_INCREMENT,
-name varchar(255),
-favorite varchar(255),
-aspiration varchar(255),
-PRIMARY KEY (id)
-);
-
 # 講師から渡されたSQL(皆さんの自己紹介を登録するSQL)を実行
-insert into self_introductions values
-(null, '早田優希', '睡眠', '頑張ります!'),
-(null, '平野洸志', '囲碁の観戦', 'よろしくお願いします'),
-(null, '飯田　遥香', 'お酒', '抱負'),
-(null, '今井琉偉', '筋トレ', 'がんばりまあす'),
-(null, '石川峻也', '好きなこと', '抱負'),
-(null, '川口航平', '囲碁を打つこと', '自分より強く、自分に似た打ち方をする囲碁AIを作成できる程度の能力を身につける'),
-(null, '川島 寛生', '好きなこと', '抱負'),
-(null, '森下大地', '囲碁', '頑張ります'),
-(null, '村上雄亮', '映画鑑賞', '頑張ります'),
-(null, 'おがたじゅん', 'げーむ', 'がんばります'),
-(null, '大隈康平', 'ねること', 'がんばる'),
-(null, '砂原　圭輔', '合コン', '頑張る'),
-(null, '鈴木章記', 'ゲーム', 'よろしくお願いいたします'),
-(null, '高田', 'ギター', '頑張ります'),
-(null, '谷口光', '好きなこと', '抱負'),
-(null, '梅津丈誠', '音楽', '友達１００人作りたい'),
-(null, '八木和也', '映画', '頑張ります'),
-(null, '涌田朋幸', '食べること', '頑張ります')
-;
+
 
 # select * from self_introductions; でレコードが取り出せたらOK！
 ```
 
 ### 自己紹介一覧ページ
-training_2021/self_introduction/の下にself_introductions_苗字.phpを作成し、<br>
+tri2022/self_introduction/の下にself_introductions_苗字.phpを作成し、<br>
 自己紹介の一覧を表示する機能を作ってみましょう。<br>
-training_2021/select.phpを参考にしてください。<br>
+tri2022/select.phpを参考にしてください。<br>
 <br>
 余裕のある人は...<br>
 一覧表示ではなく、ランダムで1人の自己紹介だけ表示する機能を作ってみてください。(以下を参考)
 https://www.javadrive.jp/phpfunc/math/index1.html
+
 ```
 # ヒント
 # $resultから1レコードだけ取り出すには、

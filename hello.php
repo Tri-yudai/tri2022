@@ -5,7 +5,7 @@
     </head>
     <body>
         <?php
-        echo "<p>2021年新卒技術研修</p>";
+        echo "<p>2022年新卒技術研修</p>";
         ?>
   </body>
 </html>
