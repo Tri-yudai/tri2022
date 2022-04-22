@@ -34,7 +34,9 @@ $aspiration = 'とりあえずがんばる';
         <h3>抱負</h3>
         <!-- 下の<p>と</p>の間に抱負($aspiration)が表示されるようにしてください -->
         <p>
-            echo $aspiration;
+            <?php
+                echo $aspiration;
+            ?>
         </p>
         
     </body>
