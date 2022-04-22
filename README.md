@@ -212,6 +212,7 @@ usersテーブルのレコード一覧が表示されます。<br>
     <input type="submit" value="検索">
 </form>
 ```
+
 ### 検索項目を追加する
 名前の検索バーだけでなく、年齢、色の検索バーも追加して検索が行えるようにしましょう！<br>
 <br>
@@ -225,12 +226,155 @@ search.phpを参考に、自己紹介検索ページを作ってみてくださ�
 ファイル名はintroduction_search_苗字.php<br>
 <br>
 
-## 追加機能の実装
+## 共有のGitにプッシュする(2022/04/25)
+今まで tri-tarasawa/tri2022 リポジトリからForkして、ブランチを作成してプッシュしていましたが、<br>
+Backlogというタスクとか、進捗とか管理できるツールの中のGitHubに近い機能を使用して「共有のリポジトリにプッシュする」という実際の開発に近いことを行っていきます。<br>
+<br>
+まずはBacklogのプロジェクトに招待するため、みなさんの会社メールアドレスを tarasawa_chisato@3-ize.jp にチャットで送ってください。<br>
+<br>
+Backlog招待されるまでの間、tri-tarasawa/tri2022 のmasterブランチをプルして、colors.txtの2行目に1行目を参考にして自身の好きな色を2種類、16進数で入力してください。<br>
+参考：<br>
+https://www.colordic.org/s<br>
+https://color.adobe.com/ja/create/color-wheel<br>
+<br>
+<br>
+招待が来たら、自分で`self_自分の名前`でブランチを作成し、<br>
+`self_introduction/self_introductions_名前.php`と、`colors.txt`をコミットし、GitのURLを以下に変更した後、プッシュしてみてください<br>
+
+```
+GitのURL：https://3ize.backlog.jp/git/NPP/tri2022.git
+
+#プッシュ先変更方法
+#金曜日に tri-tarasawa/tri2022 をプルしたフォルダに移動する
+cd c:/users/自分の名前/Documents/tri2022
+
+#以下のコマンドでプッシュ先のURLを設定する
+git remote set-url origin https://3ize.backlog.jp/git/NPP/tri2022.git
+
+#変更できたか確認
+git remote -v
+```
+
+プッシュが完了したら、https://3ize.backlog.jp/git/NPP/tri2022/tree/ブランチ名 にアクセスし、自分がプッシュした内容が表示されることを確認してください<br>
+
+
+## 追加機能の実装 (2022/04/25)
 ### usersテーブルのレコード追加機能
 usersテーブルにレコードを追加する機能を実装します。<br>
 (insert.phpを編集)<br>
+
+### 自己紹介ページにQRコードを表示させる
+QRコードを生成するPHPのライブラリが世の中にあるので、こちらを使用して自己紹介ページにQRコードをつけていきます。
+
+インストールするアプリケーション
+・Composer
+
+手順
+1. tri2022 フォルダ内に composer.json ファイルを作成し、以下の内容を入力する
+```
+{
+    "require": {
+        "tecnickcom/tc-lib-barcode": "^1.15"
+    }
+}
+
+```
+2. コマンドプロンプトまたはパワーシェルで、tri2022フォルダに移動した後、以下のコマンドを入力する
+```
+composer install
+```
+3. `localhost/qrtest.php`を開いて、QRコードが表示されたら成功。スマホで読んでみるとGoogleにつながる。
+
+### usersテーブルと、他のテーブルを連結する
+現状のusersテーブルでは、名前、趣味、抱負しか入れることができませんが、新たなテーブルを作成して、結合すれば1人あたりのデータを無限に増やすことができます。<br>
+（カラムを増やすだけで対応できるけど…）<br>
+■準備<br>
+`colors.txt`に自分の好きな色を以下のように2つ入力して、colors.txtをBacklogのGitにプッシュしてください<br>
+
+以下の条件で新規テーブルを作成してください。<br>
 <br>
-## PHPの基礎 or HTML,CSSの学習 or JavaScript予習(自習形式)
+■テーブル名<br>
+colors<br>
+<br>
+■カラム
+|カラム名|型|NOT NULL|自動採番|
+|----|----|----|----|
+|id|integer|○|○|
+|self_introduction_id|integer|○||
+|foregroundr|varchar(255)|○||
+|background|varchar(255)|○||
+
+■プライマリーキー<br>
+id, self_introduction_id<br>
+■テーブルに挿入するデータ<br>
+```
+後で作成します。
+```
+
+テーブルを作成したら、PHPを書く前に以下のSQL文を叩いてusersテーブルとcolorsテーブルが一緒に出力されることを確認してください<br>
+```
+SELECT self_introductions.*, colors.self_introduction_id, colors.foreground, colors.background FROM self_introductions
+INNER JOIN colors
+ON self_introductions.id = colors.self_introduction_id;
+```
+⇒これは、usersテーブルのIDと、colorsテーブルのuser_idが一致するデータを連結して取得しています。<br>
+例えば・・・<br>
+■self_introductionsテーブル<br>
+|id|name|favorite|aspiration|
+|--|--|--|--|
+|1|人間|ゲーム|遅刻しない|
+|2|犬|散歩|走らない|
+|4|猫|睡眠|障子破らない|
+|5|熊|狩り|人間を狩らない|
+
+<br>
+
+■colorsテーブル<br>
+|id|self_introduction_id|foreground|background|
+|--|--|--|--|
+|1|1|#000000|#FFFFFF|
+|2|2|#EFEFEF|#CCCCCC|
+|3|4|#00FF00|#FF0000|
+|4|9|#CCCCCC|#000000|
+
+<br>
+
+があったとして、先ほどのコマンドを実行すると、以下の結果が表示されるはずです。<br>
+|id|name|favorite|aspiration|self_introduction_id|foreground|background|
+|--|--|--|--|--|--|--|
+|1|人間|ゲーム|遅刻しない|1|#000000|#FFFFFF|
+|2|犬|散歩|走らない|2|#EFEFEF|#CCCCCC|
+|4|猫|睡眠|障子破らない|4|#00FF00|#FF0000|
+
+colorsテーブルのidは、select文の最初で表示しないようにしているため、出力されません<br>
+また、users.id=5の熊は、colors.user_id=5がないので、出力されません。<br>
+colors.id=4は、users.id=9がないため、こちらも出力されません<br>
+<br>
+
+### 自己紹介ページに反映する
+qrTest.php を参考に、自己紹介ページ `self_introduction/self_introductions_名前.php` に、colorsテーブルの色で、今いるURLのQRコードを表示するPHPを書く<br>
+<br>
+■ヒント
+* `getBarcodeObj` 2番目の引数に今いるページのURLを取得して使用する
+* `getBarcodeObj` 5番目の引数にQRコードの黒い部分の色を、usersテーブルのidに紐づくcolorsテーブルのforeground の値が入るようにする
+* `getBarcodeObj` の後、`setBackgroundColor` に、usersテーブルのidに紐づくcolorsテーブルのbackground の値が入るようにする
+
+
+<!-- ツール系の紹介
+・SourceTree
+・ngrok　⇒　exeをpathに入れてcmdで実行する
+・BacklogのGitに新卒の方々を追加して、人のリポジトリにプッシュするとか
+・Composerのインストール、composer.jsonのrequire、自分の好きな内容を入れたQRコードを作成する（これを自己紹介ページに貼り付けるとかいいよね）
+・CSSやろう -->
+<br>
+
+## やることなくなったら...
+### ngrok を使用して今自分が作った自己紹介ページにスマホでアクセスしてみる
+https://ngrok.com/<br>
+https://qiita.com/yamatmoo/items/8d5c2ffe6edf54c91957<br>
+<br>
+
+### PHPの基礎 or HTML,CSSの学習 or JavaScript予習(自習形式)
 * プログラミングが初めて、またはPHPに自信がない人は...<br>
 プロゲートでPHPの学習を進める(会社のメールアドレスで会員登録してOKです)<br>
 https://prog-8.com/courses/php<br>
