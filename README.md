@@ -237,9 +237,9 @@ Backlog招待されるまでの間、tri-tarasawa/tri2022 のmasterブランチ�
 https://www.colordic.org/s<br>
 https://color.adobe.com/ja/create/color-wheel<br>
 <br>
-<br>
-招待が来たら、自分で`self_自分の名前`でブランチを作成し、<br>
-`self_introduction/self_introductions_名前.php`と、`colors.txt`をコミットし、GitのURLを以下に変更した後、プッシュしてみてください<br>
+
+Backlogの招待が来たら（＝ https://3ize.backlog.jp/projects/NPP にアクセスできるようになったら）、`self_自分の名前`でブランチを作成し、<br>
+`self_introduction/self_introductions_名前.php`と、編集した`colors.txt`をコミットし、GitのURLを以下に変更した後、プッシュしてください<br>
 
 ```
 GitのURL：https://3ize.backlog.jp/git/NPP/tri2022.git
@@ -258,18 +258,27 @@ git remote -v
 プッシュが完了したら、https://3ize.backlog.jp/git/NPP/tri2022/tree/ブランチ名 にアクセスし、自分がプッシュした内容が表示されることを確認してください<br>
 
 
-## 追加機能の実装 (2022/04/25)
+## 追加機能の実装
 ### usersテーブルのレコード追加機能
 usersテーブルにレコードを追加する機能を実装します。<br>
 (insert.phpを編集)<br>
 
+### ページの構成を変更する
+現在は、検索結果もランダムも全件表示も全て1つのページで表示していますが、趣味や抱負はそれぞれ別のページで表示させるようにしたいと思います。<br>
+前に作ってもらった`self_introduction/self_introductions_名前.php`の他に、`self_introduction/detail/名前.php`を作成いただき、以下の要件に沿って作成してください<br>
+* `self_introduction/self_introductions_名前.php`
+  * 趣味と抱負の表示を削除
+  * 検索結果、ランダム表示、全件表示の名前をクリックした際に、 `self_introduction/detail/名前.php?id={usersテーブルのID}` へ遷移する
+* `self_introduction/detail/名前.php`
+  * `$_GET['id']`でusersからデータをもってきて名前、趣味、抱負を表示する
+
 ### 自己紹介ページにQRコードを表示させる
-QRコードを生成するPHPのライブラリが世の中にあるので、こちらを使用して自己紹介ページにQRコードをつけていきます。
+QRコードを生成するPHPのライブラリがあるので、こちらを使用して自己紹介ページにQRコードをつけていきます。
 
 インストールするアプリケーション
-・Composer
+* Composer https://getcomposer.org/
 
-手順
+#### 手順
 1. tri2022 フォルダ内に composer.json ファイルを作成し、以下の内容を入力する
 ```
 {
@@ -289,8 +298,6 @@ composer install
 現状のusersテーブルでは、名前、趣味、抱負しか入れることができませんが、新たなテーブルを作成して、結合すれば1人あたりのデータを無限に増やすことができます。<br>
 （カラムを増やすだけで対応できるけど…）<br>
 ■準備<br>
-`colors.txt`に自分の好きな色を以下のように2つ入力して、colors.txtをBacklogのGitにプッシュしてください<br>
-
 以下の条件で新規テーブルを作成してください。<br>
 <br>
 ■テーブル名<br>
@@ -310,14 +317,15 @@ id, self_introduction_id<br>
 ```
 後で作成します。
 ```
-
+⇒self_introductionsテーブルに違うデータが入ってるとか、何かイレギュラーなことがありましたらself_introductionsテーブルに沿ってself_introductions_idを編集してください。<br>
+<br>
 テーブルを作成したら、PHPを書く前に以下のSQL文を叩いてusersテーブルとcolorsテーブルが一緒に出力されることを確認してください<br>
 ```
 SELECT self_introductions.*, colors.self_introduction_id, colors.foreground, colors.background FROM self_introductions
 INNER JOIN colors
 ON self_introductions.id = colors.self_introduction_id;
 ```
-⇒これは、usersテーブルのIDと、colorsテーブルのuser_idが一致するデータを連結して取得しています。<br>
+⇒これは、self_introductionsテーブルのIDと、colorsテーブルのself_introduction_idが一致するデータを連結して取得しています。<br>
 例えば・・・<br>
 ■self_introductionsテーブル<br>
 |id|name|favorite|aspiration|
@@ -347,8 +355,8 @@ ON self_introductions.id = colors.self_introduction_id;
 |4|猫|睡眠|障子破らない|4|#00FF00|#FF0000|
 
 colorsテーブルのidは、select文の最初で表示しないようにしているため、出力されません<br>
-また、users.id=5の熊は、colors.user_id=5がないので、出力されません。<br>
-colors.id=4は、users.id=9がないため、こちらも出力されません<br>
+また、self_introductions.id=5の熊は、colors.self_introduction_id=5がないので、出力されません。<br>
+colors.id=4は、self_introductions.id=9がないため、こちらも出力されません<br>
 <br>
 
 ### 自己紹介ページに反映する
